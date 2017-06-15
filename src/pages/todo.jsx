@@ -1,9 +1,15 @@
 import TodoList from '../components/todoList';
 import {autobind} from 'core-decorators';
+import * as action from '../action'
+
+import { connect } from 'react-redux'; // не нужно импортить store ? //все вещи  возвращённые в результате ф-ии connect опрокидываюстя в props нашего компонента. notes запросили из reduce
 
 const cities = require('../cities.json');
 
 @autobind()
+@connect( store => {
+   return store.notes;
+})
 export default class TodoPage extends React.Component {
 
    constructor(props) {
@@ -17,6 +23,16 @@ export default class TodoPage extends React.Component {
          }],
          cities: cities
       };
+   }
+
+   //когда наш компонент загружен, мы должны запустить процедуру получения данных
+
+   componentWillMount() {
+      let toDispatch = actions.add();
+
+      //т.к. мы используем Redux - появляется с помощью воздействия что осуществляет Provider дополнительная функциональность в нашем самом компоненте,фу-я диспечеризации dispatch в самом компоненте и мы её вызываем.
+
+      this.props.dispatch(toDispatch);
    }
 
    add(val) {
@@ -56,14 +72,30 @@ export default class TodoPage extends React.Component {
       }
    }
 
-   sort() {
-      let cities = this.state.cities;
-      cities.sort();
+   // sort() {
+   //    let cities = this.state.cities.map((item,index) =>
+   //       item.city.sort());
+   //
+   //    this.setState({
+   //       cities
+   //    })
+   // }
+
+/*   search(e) {debugger;
+
+      let inputData = e.target.value.toLowerCase();
+      let filterData;
+
+      if (inputData.lenght > 0) {
+          filterData = cities.filter((res) => res.city.toLowerCase().indexOf(inputData) !== -1)
+      } else {
+          filterData = cities;
+      }
 
       this.setState({
-         cities
+         cities: filterData
       })
-   }
+   }*/
 
    /*filter(action) {
     let notes = this.state.notes.filter(action);
@@ -74,15 +106,16 @@ export default class TodoPage extends React.Component {
     }*/
 
    render() {
-      let cities = this.state.cities;
+      /*let cities = this.state.cities;*/
 
       return (
           <div className="todo-list">
              <h2>Заметки</h2>
 
-             <TodoList notes={this.state.notes} add={this.add} complete={this.complete} remove={this.remove} />
+             <TodoList notes={this.props.notes} add={this.add} complete={this.complete} remove={this.remove} />
 
              <div className="city-block">
+                <input type="text" onChange={this.search} />
                 <table>
                    <thead>
                    <tr>
@@ -91,7 +124,7 @@ export default class TodoPage extends React.Component {
                    </tr>
                    </thead>
 
-                   {cities.map((item, index) =>
+                   {this.state.cities.map((item, index) =>
                        <tbody key={index}>
                        <tr>
                           <td>{item.id}</td>

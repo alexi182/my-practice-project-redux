@@ -8,22 +8,30 @@ import Help from './pages/help';
 import TodoPage from './pages/todo';
 import NotFound from './pages/notfound';
 
+import { Provider } from 'react-redux';
+import store from './stores/note';
+
 let page = document.getElementById('page');
 
 ReactDOM.render(
-    <Router history={browserHistory}>
-       <Route component={Layout} >
-          <Route path="/" component={Index} />
-          {/*<Route path="/profile(/:userId)" component={Profile} />*/}
-          <Route path="/profile" component={Profile} >
-             <Route path=":userId" component={ProfileId} />
+    <Provider store={store}  >
+       <Router history={browserHistory}>
+          <Route component={Layout} >
+             <Route path="/" component={Index} />
+             {/*<Route path="/profile(/:userId)" component={Profile} />*/}
+             <Route path="/profile" component={Profile} >
+                <Route path=":userId" component={ProfileId} />
+             </Route>
+             <Route path="/help" component={Help} />
+             <Route path="/todo" component={TodoPage} />
+             <Route path="/notfound" component={NotFound} />
+             <Redirect from="*" to="/notfound" />
           </Route>
-          <Route path="/help" component={Help} />
-          <Route path="/todo" component={TodoPage} />
-          <Route path="/notfound" component={NotFound} />
-          <Redirect from="*" to="/notfound" />
-       </Route>
-    </Router>, page);
+       </Router>
+    </Provider>
+    , page);
+
+
 
 
 

@@ -1,11 +1,12 @@
+/*let TestComp = (props) => {
+ return (<div>
+ {props.message}
+ </div>)
+ };*/
+
 import ServiceItem from './serviceItem';
 import {autobind} from 'core-decorators';
 const servicesData = require('../service.json');
-let TestComp = (props) => {
-   return (<div>
-      {props.message}
-   </div>)
-};
 
 @autobind()
 export default class Service extends React.Component {
@@ -14,8 +15,8 @@ export default class Service extends React.Component {
       super(props);
 
       this.state = {
-         services: servicesData,
-         total: this.total(servicesData)
+         services: servicesData, //начальное состояние - данные из json
+         total: this.total(servicesData) //cумма данных
       }
    }
 
@@ -35,28 +36,28 @@ export default class Service extends React.Component {
       let s = servicesSelected.find(srv => srv.name == name);
 
       if (!s) return;
+      s.selected = !s.selected;
 
-      if (s.selected == true) {
+    /* if (s.selected == true) {
          s.selected = false;
       } else {
          s.selected = true;
-      }
-      // s.selected = !s.selected;
+      }*/
 
       this.setState({
-         services2: servicesSelected,
+         services: servicesSelected,
          total: this.total(servicesSelected)
       })
    }
 
-   total(services2) {
-      return services2.filter(s => s.selected).reduce((prev, current) => prev + current.price, 0);
+   total(servicesData) {
+      return servicesData.filter(s => s.selected).reduce((prev, current) => prev + current.price, 0);
    }
 
    render() {
       return (
           <div>
-             <TestComp message="Привет" />
+             {/*<TestComp message="Привет" />*/}
              <h2>Услуги</h2>
              <table className="table service-table">
                 <tbody>
