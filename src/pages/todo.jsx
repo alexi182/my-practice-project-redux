@@ -1,28 +1,28 @@
 import TodoList from '../components/todoList';
 import {autobind} from 'core-decorators';
-import * as action from '../action'
+import * as actions from '../actions/note';
 
-import { connect } from 'react-redux'; // не нужно импортить store ? //все вещи  возвращённые в результате ф-ии connect опрокидываюстя в props нашего компонента. notes запросили из reduce
+import { connect } from 'react-redux'; // не нужно импортить store ? //все вещи  возвращённые в результате ф-ии connect опрокидываюстя в props нашего компонента. notes запросили из reduce и мы можем выводить его <TodoList notes={this.props.notes}> вместо state
 
 const cities = require('../cities.json');
 
-@autobind()
 @connect( store => {
    return store.notes;
 })
+@autobind()
 export default class TodoPage extends React.Component {
 
    constructor(props) {
       super(props);
 
-      this.state = {
+      /*this.state = {
          notes: [{
             text: 'Text',
             completed: false,
             id: 0
          }],
          cities: cities
-      };
+      };*/
    }
 
    //когда наш компонент загружен, мы должны запустить процедуру получения данных
@@ -114,7 +114,7 @@ export default class TodoPage extends React.Component {
 
              <TodoList notes={this.props.notes} add={this.add} complete={this.complete} remove={this.remove} />
 
-             <div className="city-block">
+            {/* <div className="city-block">
                 <input type="text" onChange={this.search} />
                 <table>
                    <thead>
@@ -133,7 +133,7 @@ export default class TodoPage extends React.Component {
                        </tbody>
                    )}
                 </table>
-             </div>
+             </div>*/}
           </div>
       )};
 }

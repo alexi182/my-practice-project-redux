@@ -2,4 +2,4 @@ const ADD = 'NOTE_ADD';
 const REMOVE = 'NOTE_REMOVE';
 const COMPLETE = 'NOTE_COMPLETE';
 
-export { ADD,REMOVE,COMPLETE };
+export { ADD, REMOVE, COMPLETE };
