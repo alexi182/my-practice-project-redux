@@ -11,6 +11,5 @@ export default function notesReducers( state = { notes:[] }, action ) {  // ре
          state = {  }
    }
 
-
    return state;
 }
