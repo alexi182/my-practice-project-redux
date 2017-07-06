@@ -9,7 +9,7 @@ import TodoPage from './pages/todo';
 import NotFound from './pages/notfound';
 
 import { Provider } from 'react-redux';
-import store from './stores/note';
+import store from './stores/store';
 
 let page = document.getElementById('page');
 

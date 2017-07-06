@@ -1,23 +1,27 @@
-/*let TestComp = (props) => {
- return (<div>
- {props.message}
- </div>)
- };*/
-
 import ServiceItem from './serviceItem';
 import {autobind} from 'core-decorators';
-const servicesData = require('../service.json');
+import * as actions from '../actions/service';
+import { connect } from 'react-redux';
+
+@connect( store => {
+   return store.service;
+})
 
 @autobind()
 export default class Service extends React.Component {
 
    constructor(props) {
       super(props);
+   }
 
-      this.state = {
-         services: servicesData, //начальное состояние - данные из json
-         total: this.total(servicesData) //cумма данных
-      }
+   componentWillMount() {
+      let action = actions.init();
+      this.props.dispatch(action);
+   }
+
+   select(name) {
+      let toDispatch = actions.select(name);
+      this.props.dispatch(toDispatch);
    }
 
    getChildContext() {
@@ -28,30 +32,10 @@ export default class Service extends React.Component {
 
    static childContextTypes = {
       select: React.PropTypes.func
-   }
+   };
 
-   select(name) {
-
-      let servicesSelected = this.state.services.slice(0); // новый массив в памяти с теми же элементами - оптимизация
-      let s = servicesSelected.find(srv => srv.name == name);
-
-      if (!s) return;
-      s.selected = !s.selected;
-
-    /* if (s.selected == true) {
-         s.selected = false;
-      } else {
-         s.selected = true;
-      }*/
-
-      this.setState({
-         services: servicesSelected,
-         total: this.total(servicesSelected)
-      })
-   }
-
-   total(servicesData) {
-      return servicesData.filter(s => s.selected).reduce((prev, current) => prev + current.price, 0);
+   get total() {
+      return this.props.services.filter(s => s.selected).reduce((prev, current) => prev + current.price, 0);
    }
 
    render() {
@@ -62,12 +46,12 @@ export default class Service extends React.Component {
              <table className="table service-table">
                 <tbody>
                 {
-                   this.state.services.map((s, index) =>
+                   this.props.services.map((s, index) =>
                        <ServiceItem {...s} key={index} />
                    )}
                 <tr className="row">
                    <td>Итого</td>
-                   <td>{this.state.total} p.</td>
+                   <td>{this.total} p.</td>
                 </tr>
                 </tbody>
              </table>

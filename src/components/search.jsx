@@ -1,33 +1,28 @@
 import {autobind} from 'core-decorators';
-const searchData = require('../data2.json');
+import * as actions from '../actions/data';
+import { connect } from 'react-redux';
+
+@connect( store => {
+   return store.data;
+})
 
 @autobind()
 export default class Search extends React.Component {
 
    constructor(props) {
       super(props);
+   }
 
-      this.state = {
-         people: searchData
-      }
+   componentWillMount() {
+      let action = actions.init();
+      this.props.dispatch(action);
    }
 
    search(e) {
-      let val = e.target.value.toLowerCase();
-      let people2;
+      let val = e.target.value;
+      let toDispatch = actions.search(val); //ссылка на объект, созданный в action.
 
-      if (val.length > 0) {
-         people2 = searchData.filter((p) =>
-         p.name.toLowerCase().indexOf(val) !== -1 ||
-         p.surname.toLowerCase().indexOf(val) !== -1 ||
-         p.age.toString().toLowerCase().indexOf(val) !== -1 )
-      } else {
-         people2 = searchData;
-      }
-
-      this.setState({
-         people: people2
-      })
+      this.props.dispatch(toDispatch);
    }
 
    render() {
@@ -46,7 +41,7 @@ export default class Search extends React.Component {
                 </thead>
                 <tbody>
                 {
-                   this.state.people.map((searchItem, index) =>
+                   this.props.people.map((searchItem, index) =>
                        <tr className="row" key={index}>
                           <td>{searchItem.name}</td>
                           <td>{searchItem.surname}</td>

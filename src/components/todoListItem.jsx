@@ -16,6 +16,7 @@ export default class TodoListItem extends React.Component {
 
    render() {
 
+
       let completed = this.props.completed ? ' completed' : '';
 
       return (

@@ -1,15 +1,49 @@
 import * as constants from '../constants/note';
-/*import axios from 'axios';*/
 
+export default function notesReducers(state = { notes:[] }, action) {
 
-export default function notesReducers( state = { notes:[] }, action ) {  // редусер принимает 2 параметра - и на
-// выходе новый state.
-// осн. задача с помощью имутабельности получить новый state. имутабельность - неизменность - однажды созданный объект,чисто итд  при изменении должен порождать новый экземпляр. т.е если у меня есть объект со свойством name, я этот name меняю и должен создаватсья новый объект с новй изменённым свойством. любое действие что я выполняю
-// должно порождать новый объект состояния.! тоже самое что slice для массива.
-   switch (action.payload) {
-      case constants.ADD:
-         state = {  }
+   switch (action.type) {
+
+      case constants.ADD: {
+
+         let notes = state.notes.slice();
+         notes.push({
+            text: action.payload,
+            completed: false,
+            id: state.notes.length + 1
+         });
+
+         state = { ...state, notes };
+         break;
+      }
+
+      case constants.COMPLETE: {
+
+         let notes = state.notes.slice();
+         let note = notes.find((n) => n.id == action.payload);
+         if (note) {
+            note.completed = !note.completed;
+         }
+
+         state = { ...state, notes };
+         break;
+      }
+
+      case constants.REMOVE: {
+
+         let notes = state.notes.slice();
+
+         let noteIndex = state.notes.findIndex((item) => item.id == action.payload);
+         if (noteIndex !== -1) {
+
+            notes.splice(noteIndex, 1);
+         }
+
+         state = { ...state, notes };
+         break;
+      }
    }
 
    return state;
 }
+

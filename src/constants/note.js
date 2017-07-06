@@ -1,5 +1,6 @@
-const ADD = 'NOTE_ADD';
-const REMOVE = 'NOTE_REMOVE';
-const COMPLETE = 'NOTE_COMPLETE';
+const prefix = 'NOTE';
+const ADD = `ADD_${prefix}`;
+const REMOVE = `REMOVE_${prefix}`;
+const COMPLETE = `COMPLETE_${prefix}`;
 
-export { ADD,REMOVE,COMPLETE };
+export { ADD, REMOVE, COMPLETE };
